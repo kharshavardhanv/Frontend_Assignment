@@ -1,56 +1,83 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "./App.css";
-
+import "./MovieCard.css";
 const Login = () => {
-  const [credentials, setCredentials] = useState({ name: "", password: "" });
+  const [loginData, setLoginData] = useState({
+    name: "",
+    password: "",
+  });
+
+  const [loginError, setLoginError] = useState("");
+
+  const [submitting, setSubmitting] = useState(false);
+
   const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setCredentials({ ...credentials, [name]: value });
+    setLoginData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
   };
 
-  const handleSubmit = (e) => {
+  const handleLogin = (e) => {
     e.preventDefault();
-    const user = JSON.parse(localStorage.getItem("user"));
+
+    setSubmitting(true);
+
+    const storedData = localStorage.getItem("userSignupData");
+    const registeredData = storedData ? JSON.parse(storedData) : {};
+
+    console.log("This data is used to test", storedData, registeredData);
+
     if (
-      user &&
-      user.name === credentials.name &&
-      user.password === credentials.password
+      loginData.name === registeredData.name &&
+      loginData.password === registeredData.password
     ) {
-      navigate("/home");
+      console.log("Login Successful");
+      alert("Login Successful");
+      setLoginError("");
+      navigate("/MovieList");
     } else {
-      alert("Invalid Credentials");
+      setLoginError("Invalid Credentials");
+      alert("Login failed. Please check your credentials.");
     }
+
+    setSubmitting(false);
   };
 
   return (
-    <div className="container">
-      <h2>Login</h2>
-      <form onSubmit={handleSubmit}>
-        <label>
-          Name:
+    <div>
+      <form onSubmit={handleLogin}>
+        <label htmlFor="name">
+          Username:
           <input
             type="text"
             name="name"
-            value={credentials.name}
+            value={loginData.name}
             onChange={handleChange}
             required
           />
         </label>
-        <label>
+        <br />
+        <label htmlFor="password">
           Password:
           <input
             type="password"
             name="password"
-            value={credentials.password}
+            value={loginData.password}
             onChange={handleChange}
             required
           />
         </label>
-        <button type="submit">Login</button>
+        <br />
+        <button type="submit" disabled={submitting}>
+          Sign in
+        </button>
       </form>
+
+      {loginError && <p>{loginError}</p>}
     </div>
   );
 };

@@ -1,22 +1,27 @@
 import React from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import Signup from "./Signup";
-import Login from "./Login";
-import Home from "./Home";
-import "./App.css"; // Import the CSS file
+import {BrowserRouter as Router,Route, Routes} from "react-router-dom";
+import Home from "./components/Home.js"
+import UserSignup from "./components/UserSignup";
+import Login from "./components/Login";
+import MovieList from "./components/MovieList.js";
+import CompanyInfo from "./components/CompanyInfo.js";
+import Navbar from "./components/Navbar.js";
 
-function App() {
-  return (
+const App = () => {
+  return(
     <Router>
-      {localStorage.setItem("hello", "hiiiiii")}
+      <div>
+         <Navbar />
       <Routes>
-        <Route path="/signup" element={<Signup />} />
+        <Route path="/" element={<Home />} />
+        <Route path="/signup" element={<UserSignup />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/home" element={<Home />} />
-        <Route path="/" element={<Login />} />
+        <Route path="/movieList" element={<MovieList />} />
+        <Route path="/companyInfo" element={<CompanyInfo />} />
       </Routes>
+      </div>
     </Router>
   );
-}
+};
 
 export default App;
